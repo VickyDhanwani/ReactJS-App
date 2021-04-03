@@ -1,5 +1,8 @@
 import React from 'react';
 import './App.css';
+import LoginComponent from './Components/LoginComponent';
+import SignUpComponent from './Components/SignUpComponent';
+
 
 class App extends React.Component {
   state = { isNewUser : false,
@@ -19,12 +22,14 @@ class App extends React.Component {
     this.setState({loginPage : true, signupPage : false});
   }
 
-  updateUsername = (e) => {
-    this.setState({username : e.target.value});
+  updateUsername = (u) => {
+    this.setState({username : u});
+    console.log(u);
   }
 
-  updatePassword = (e) => {
-    this.setState({password: e.target.value});
+  updatePassword = (p) => {
+    this.setState({password: p});
+    console.log(p);
   }
 
   Authenticate = () => {
@@ -34,13 +39,7 @@ class App extends React.Component {
     if(this.state.loginPage === true) {
       return (
         <div className = 'loginClass'>
-          Login Component
-          <br/>
-          <label>Enter Login :</label>
-          <input type = 'text' name = 'username' onChange = {(e) => this.updateUsername(e)}/>
-          <br/>
-          <label>Enter Password:</label>
-          <input type = 'password' name = 'password' onChange = {(e) => this.updatePassword(e)}/>
+          <LoginComponent updatePassword =  {this.updatePassword} updateUsername = {this.updateUsername}/>
           <br/>
           <button type = 'button' name = 'loginbutton' onClick = {this.Authenticate}>LOGIN</button>
           <br/>
@@ -51,7 +50,7 @@ class App extends React.Component {
     else if(this.state.signupPage === true) {
       return (
         <div className = 'signupClass'>
-          Sign Up Component
+          <SignUpComponent updatePassword = {this.updatePassword} updateUsername = {this.updateUsername} backToLogin = {this.backToLogin} />
           <button type = 'button' name = 'backToLogin' onClick = {this.backToLogin}>Back to Login</button>
         </div>
       );
