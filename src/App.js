@@ -11,7 +11,10 @@ class App extends React.Component {
     signupPage : false,
     dashboardView : true,
     username : null,
-    password : null
+    password : null,
+    showCredIncorrectError : false,
+    showEmptyFieldError : false,
+    showServerErrorEncounteredError : false
   }
   
   switchToSignUp = () => {
@@ -49,9 +52,14 @@ class App extends React.Component {
       headers : new Headers({ "Content-Type": "application/json" })
     }).then(async response => {
       const res = await response.json();
-      console.log(res.ispresent);
+      if(res.isAuthenticated === true) {
+        this.setState({loginPage : false, dashboardView : true ,isAuthenticated : true});
+      }
+      else {
+        this.setState({loginPage : true, dashboardView : false, isAuthenticated : false})
+      }
     });
-    this.setState({loginPage : false, dashboardView : true});
+    
   }
   render() {
     if(this.state.loginPage === true) {
