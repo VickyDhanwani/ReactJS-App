@@ -33,6 +33,24 @@ class App extends React.Component {
   }
 
   Authenticate = () => {
+    let authenticationPackage = {
+      username : this.state.username,
+      password : this.state.password
+    }
+    /*{
+      method : 'POST',
+      body : JSON.stringify(authenticationPackage),
+      headers : new Headers({"Content-Type" : "application/json"})
+    }*/
+    console.log(JSON.stringify(authenticationPackage));
+    fetch('http://localhost:8081/v1/OAuth2', {
+      method : 'post',
+      body : JSON.stringify(authenticationPackage),
+      headers : new Headers({ "Content-Type": "application/json" })
+    }).then(async response => {
+      const res = await response.json();
+      console.log(res.ispresent);
+    });
     this.setState({loginPage : false, dashboardView : true});
   }
   render() {
