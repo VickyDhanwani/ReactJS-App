@@ -7,7 +7,10 @@ app.use(cors());
 app.use(bodyParser.json());
     
 var users = [
-    
+    {
+        username : "abc",
+        password : "xyz"
+    }
 ]
 
 app.get('/api/userData', (req, res) => {
@@ -21,12 +24,13 @@ app.get('/api/postsData', (req, res) => {
      
  });
 AuthUser = (u, p) => {
-    let ispresent = "NO";
+    let ispresent = false;
     let i = 0;
     let n = users.length;
+    
     for(i = 0; i < n; i++) {
         if(users[i].username === u && users[i].password === p) {
-            ispresent = "YES";
+            ispresent = true;
             break;
         }
     }
@@ -36,42 +40,48 @@ AuthUser = (u, p) => {
 
 app.post('/v1/OAuth2', (req, res) => {
     let authData = req.body;
-    //let present = AuthUser(authData.username, authData.password);
+    let present = AuthUser(authData.username, authData.password);
     console.log(req.body);
     res.end(JSON.stringify({
-        "ispresent" : "yes"
+        "isAuthenticated" : present
     }));
 });
 
 checkuser = (u) => {
     let i = 0;
     let n = users.length;
-    let  found = "NO";
+    let  found = false;
     while(i < n) {
-        if(users[i].username === u.username || users[i].email === u.email) {
-            found = "YES";
+        if(users[i].username === u.username) {
+            found = true;
             break;
         }
-        
         i++;
     }
     return found;
 }
 
-app.post('/api/addUser', (req, res) => {
+app.post('/v1/_api/addUser', (req, res) => {
     
     let usr = req.body;
     //users.push(usr);
     let found = checkuser(usr);
+    let messgae;
+    if(found === true) {
+        messgae = "Can't add user, Username already exists";
+    }
+    else {
+        message = "User added successfully";
+    }
     console.log(found);
-    if(found == "NO") {
+    if(found === false) {
         users.push(usr);
         console.log(users);
-
     }
     res.end(JSON.stringify(
         {
-            userExist : found
+            useradded : !found,
+            responseMessage : messgae
         }
     ));
     
